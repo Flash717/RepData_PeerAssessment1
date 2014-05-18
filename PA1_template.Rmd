@@ -9,6 +9,9 @@ This document is for the Peer Assessment 1 of the Coursera Reproducible Research
 First we set the working directory:
 ```{r}
 setwd("C:/Users/Florian/Documents/Development/git/RepData_PeerAssessment1");
+```
+Then we read the file "activity.csv" and format the date column
+```{r}
 activity <- read.table(file="activity.csv", 
                        header=TRUE,
                        sep=",",
@@ -18,18 +21,36 @@ activity$date <- as.Date(activity$date, "%Y-%m-%d");
 
 
 ## What is mean total number of steps taken per day?
-We use function mean on column 'steps' of data-frame 'activity' and remove any possible 'NA' values.
+We create a histogram and use functions mean and median on column 'steps' of data-frame 'activity' and remove any possible 'NA' values.
 ```{r}
-mean(activity$steps, na.rm=TRUE);
+hist(activity$steps,
+     main="Histogram of Steps", 
+     xlab="Steps");
+mean(activity$steps, 
+     na.rm=TRUE);
+median(activity$steps, 
+       na.rm=TRUE);
 ```
 
 
 ## What is the average daily activity pattern?
 
+```{r}
+with(activity, plot(x=date, y=steps, type="l"));
+with(activity, plot(x=date, y=interval, type="l"));
+```
+
 
 
 ## Imputing missing values
+```{r}
+
+```
 
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+```{r}
+
+```
+
