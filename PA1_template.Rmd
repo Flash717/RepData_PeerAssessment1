@@ -1,4 +1,12 @@
 # Reproducible Research: Peer Assessment 1
+**Author:** Florian Knaus
+## Introduction
+This document is for the Peer Assessment 1 of the Coursera Reproducible Research course by Roger Peng.
+
+First we set the working directory:
+```{r}
+setwd("C:/Users/Florian/Documents/Development/git/RepData_PeerAssessment1");
+```
 
 
 ## Loading and preprocessing the data
