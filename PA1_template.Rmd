@@ -17,27 +17,40 @@ activity <- read.table(file="activity.csv",
                        sep=",",
                        colClasses=c("numeric","character","numeric"));
 activity$date <- as.Date(activity$date, "%Y-%m-%d");
+clean_activity <- activity[which(activity$steps != "NA"),];
 ```
 
 
 ## What is mean total number of steps taken per day?
 We create a histogram and use functions mean and median on column 'steps' of data-frame 'activity' and remove any possible 'NA' values.
 ```{r}
-hist(activity$steps,
+library(plyr)
+daily_activity <- ddply(clean_activity, 
+                        .(date), 
+                        summarise, 
+                        steps=sum(steps));
+hist(daily_activity$steps,
      main="Histogram of Steps", 
      xlab="Steps");
-mean(activity$steps, 
-     na.rm=TRUE);
-median(activity$steps, 
-       na.rm=TRUE);
+mean(daily_activity$steps);
+median(daily_activity$steps);
 ```
 
 
 ## What is the average daily activity pattern?
 
 ```{r}
-with(activity, plot(x=date, y=steps, type="l"));
-with(activity, plot(x=date, y=interval, type="l"));
+average_by_interval <- ddply(clean_activity, 
+                             .(interval), 
+                             summarise, 
+                             steps=mean(steps));
+
+plot(average_by_interval$interval, 
+     average_by_interval$steps, 
+     type="l",
+     xlab="Interval",
+     ylab="Steps",
+     main="Average Daily Activity Pattern");
 ```
 
 

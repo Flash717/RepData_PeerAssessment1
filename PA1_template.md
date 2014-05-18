@@ -18,6 +18,7 @@ Then we read the file "activity.csv" and format the date column
 activity <- read.table(file = "activity.csv", header = TRUE, sep = ",", colClasses = c("numeric", 
     "character", "numeric"))
 activity$date <- as.Date(activity$date, "%Y-%m-%d")
+clean_activity <- activity[which(activity$steps != "NA"), ]
 ```
 
 
@@ -26,25 +27,27 @@ activity$date <- as.Date(activity$date, "%Y-%m-%d")
 We create a histogram and use functions mean and median on column 'steps' of data-frame 'activity' and remove any possible 'NA' values.
 
 ```r
-hist(activity$steps, main = "Histogram of Steps", xlab = "Steps")
+library(plyr)
+daily_activity <- ddply(clean_activity, .(date), summarise, steps = sum(steps))
+hist(daily_activity$steps, main = "Histogram of Steps", xlab = "Steps")
 ```
 
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3.png) 
 
 ```r
-mean(activity$steps, na.rm = TRUE)
+mean(daily_activity$steps)
 ```
 
 ```
-## [1] 37.38
+## [1] 10766
 ```
 
 ```r
-median(activity$steps, na.rm = TRUE)
+median(daily_activity$steps)
 ```
 
 ```
-## [1] 0
+## [1] 10765
 ```
 
 
@@ -53,16 +56,13 @@ median(activity$steps, na.rm = TRUE)
 
 
 ```r
-with(activity, plot(x = date, y = steps, type = "l"))
+average_by_interval <- ddply(clean_activity, .(interval), summarise, steps = mean(steps))
+
+plot(average_by_interval$interval, average_by_interval$steps, type = "l", xlab = "Interval", 
+    ylab = "Steps", main = "Average Daily Activity Pattern")
 ```
 
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-41.png) 
-
-```r
-with(activity, plot(x = date, y = interval, type = "l"))
-```
-
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-42.png) 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
 
 
 
