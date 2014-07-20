@@ -61,7 +61,7 @@ median(daily_activity$steps);
 
 ## What is the average daily activity pattern?
 
-## Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
 ```r
 # sum up the mean of intervals
@@ -80,7 +80,7 @@ plot(average_by_interval$interval,
 
 ![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
 
-## Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
 ```r
 average_by_interval[average_by_interval$steps==max(average_by_interval$steps),]
@@ -94,7 +94,7 @@ average_by_interval[average_by_interval$steps==max(average_by_interval$steps),]
 
 ## Imputing missing values
 
-## Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 
 ```r
 sum(is.na(activity))
@@ -104,7 +104,7 @@ sum(is.na(activity))
 ## [1] 2304
 ```
 
-## Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 
 My strategy is to take each activity with steps = NA and fill it's steps with mean of interval from clean activity set.
 
@@ -119,14 +119,14 @@ for (i in 1:nrow(na_activity)) {
 }
 ```
 
-## Create a new dataset that is equal to the original dataset but with the missing data filled in.
+Create a new dataset that is equal to the original dataset but with the missing data filled in.
 
 
 ```r
 activity_na_rm <- rbind(clean_activity, na_activity);
 ```
 
-## Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
 
 ```r
@@ -210,3 +210,5 @@ ggplot(data=activity_all, aes(x=interval, y=steps, colour=weekend)) + geom_line(
 ```
 
 ![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-103.png) 
+
+There plots above show the difference between weekend and weekday activity.
