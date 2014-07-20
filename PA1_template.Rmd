@@ -39,7 +39,9 @@ median(daily_activity$steps);
 
 ## What is the average daily activity pattern?
 
+# Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 ```{r}
+# sum up the mean of intervals
 average_by_interval <- ddply(clean_activity, 
                              .(interval), 
                              summarise, 
@@ -53,17 +55,86 @@ plot(average_by_interval$interval,
      main="Average Daily Activity Pattern");
 ```
 
+# Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+```{r}
+average_by_interval[average_by_interval$steps==max(average_by_interval$steps),]
+```
 
 
 ## Imputing missing values
-```{r}
 
+# Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+```{r}
+sum(is.na(activity))
 ```
 
+# Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 
+My strategy is to take each activity with steps = NA and fill it's steps with mean of interval from clean activity set.
+
+```{r}
+na_activity <- activity[is.na(activity),];
+#mactivity_na_rm <- ddply(activity, .(interval), function(x) apply(x[1], 2, mean))
+
+for (i in 1:nrow(na_activity)) {
+  #print(i)
+  na_activity[i,]$steps <- mean(clean_activity[which(clean_activity$interval == na_activity[i,]$interval),]$steps);
+}
+```
+
+# Create a new dataset that is equal to the original dataset but with the missing data filled in.
+
+```{r}
+activity_na_rm <- rbind(clean_activity, na_activity);
+```
+
+# Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+
+```{r}
+daily_activity_na_rm <- ddply(activity_na_rm, 
+                        .(date), 
+                        summarise, 
+                        steps=sum(steps));
+hist(daily_activity_na_rm$steps,
+     main="Histogram of Steps", 
+     xlab="Steps");
+mean(daily_activity_na_rm$steps);
+median(daily_activity_na_rm$steps);
+```
+
+Due to the strategy taken the mean is the same but the median is different as decimal places have been introduced into column 'steps'.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 ```{r}
+# copy dataset
+activity_weekdays <- activity_na_rm
+# add column that identifies day of week
+activity_weekdays$dayOfWeek <- weekdays(activity_weekdays$date)
+# add column that defines if weekend or not
+activity_weekdays$weekend <- activity_weekdays$dayOfWeek %in% c("Saturday", "Sunday")
+
+data_weekend <- ddply(activity_weekdays[activity_weekdays$weekend,], 
+                             .(interval), 
+                             summarise, 
+                             steps=mean(steps));
+
+data_weekdays <- ddply(activity_weekdays[!activity_weekdays$weekend,], 
+                             .(interval), 
+                             summarise, 
+                             steps=mean(steps));
+
+plot(data_weekdays$interval, 
+     data_weekdays$steps, 
+     type="l",
+     xlab="Interval",
+     ylab="Steps",
+     main="Average Daily Activity Pattern (weekdays)");
+
+plot(data_weekend$interval, 
+     data_weekend$steps, 
+     type="l",
+     xlab="Interval",
+     ylab="Steps",
+     main="Average Daily Activity Pattern (weekend)");
 
 ```
-
