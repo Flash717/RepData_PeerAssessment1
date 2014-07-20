@@ -1,6 +1,9 @@
+---
+output: html_document
+---
 # Reproducible Research: Peer Assessment 1
 **Author:** Florian Knaus
-**Last changed:** May 18, 2014
+**Last changed:** July 20, 2014
 ## Introduction
 This document is for the Peer Assessment 1 of the Coursera Reproducible Research course by Roger Peng.
 
